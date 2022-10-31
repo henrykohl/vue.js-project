@@ -11,7 +11,7 @@ export default new Vuex.Store({
   state: {
     todos: [
       { content: 123, done: false },
-      { content: 456, done: false },
+      { content: 456, done: true },
       { content: 789, done: false },
     ],
     // todos: [],
@@ -20,6 +20,7 @@ export default new Vuex.Store({
     //原始資料轉為有id的模式 (現在沒有後端DB，list去做出把資料id拿出來)
     list(state) {
       return state.todos.map((todo, tId) => {
+        // console.log("todo=", todo, " tId=", tId);
         return {
           tId,
           todo,
@@ -27,6 +28,7 @@ export default new Vuex.Store({
       });
     },
     filterList(state, getters) {
+      console.log(">>", arguments);
       return (filter) => {
         let status = null;
         switch (filter) {

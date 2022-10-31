@@ -55,3 +55,7 @@ window.localStorage.setItem('todo-vue',JSON.stringify([{ content: 123, done: fal
 $vm0.$store.dispatch('READ_TODOS').then((result)=>{ console.log(result) })
 
 $vm0.$store.dispatch("UPDATE_TODO",{tId:1, todo:{content:999,done:true}})
+
+------#2
+
+$vm0.filter='done'
