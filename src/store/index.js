@@ -9,12 +9,15 @@ const STORE = LocalStorage("todo-vue"); // new LocalStorage("todo-vue");
 
 export default new Vuex.Store({
   state: {
-    todos: [
-      { content: 123, done: false },
-      { content: 456, done: true },
-      { content: 789, done: false },
-    ],
-    // todos: [],
+    todos: [],
+    /* Todo.vue中mounted會去讀取localstorage的資料，這裡的todos就不需要了 */
+    // todos: [
+    //   { content: 123, done: false },
+    //   { content: 456, done: true },
+    //   { content: 789, done: false },
+    // ],
+    /*實際案例中需要用API去讀取遠端資料，是非同步，如此用store直接存取～不合適*/
+    // todos: STORE.load()
   },
   getters: {
     //原始資料轉為有id的模式 (現在沒有後端DB，list去做出把資料id拿出來)
@@ -28,7 +31,6 @@ export default new Vuex.Store({
       });
     },
     filterList(state, getters) {
-      console.log(">>", arguments);
       return (filter) => {
         let status = null;
         switch (filter) {
@@ -121,6 +123,22 @@ export default new Vuex.Store({
     //     todo: todos[tId],
     //   };
     // },
+    CHECK_TODO({ commit }, { tId, done }) {
+      // UPDATE_TODO ({ commit }, { tId, content }) {
+      // 1. PATCH axios.patch()
+      const todos = STORE.load();
+      /*console.log(todos[tId]);*/
+      todos[tId].done = done;
+      // todos[tId].content = content
+      STORE.save(todos);
+      // 2. commit mutation
+      commit("SET_TODOS", todos);
+      // 3. return
+      return {
+        tId,
+        todo: todos[tId],
+      };
+    },
     DELETE_TODO({ commit }, { tId }) {
       // 1. DELETE //if使用API 就只需要 axios.delete()
       const todos = STORE.load();

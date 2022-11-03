@@ -5,21 +5,50 @@
     <router-link to="/todo?filter=active" replace>Active</router-link>｜
     <router-link :to="{ name: 'Todo', query:{ filter: 'done'} }" replace>Done</router-link>
     <!-- name: 'Todo' 或是 path: '/todo'; 有了replace就不會增加歷史記錄 -->
-    <p>show: {{ filter }}</p>
-    <div>{{ list }}</div>
+    <!-- <p>show: {{ filter }}</p>
+    <div>{{ list }}</div> -->
+    <ul>
+      <!-- 直接用v-model綁定 store裡面的資料，不是一個好方法 -->
+      <!-- <li v-for="item of list" :key="item.tId">
+        <template v-if="edit!==item.tId">
+          <input type="checkbox" v-model="item.todo.done">{{ item.todo.content }}
+        </template>
+        <template v-else>
+          <input type="text" v-model="item.todo.content">
+        </template>
+      </li> -->
+      <TodoItem
+        v-for="item of list"
+        :key="item.tId+''+item.todo.content"
+        :todo="item.todo"
+        :edit="item.tId===editid"
+        @check="value => checkHandler(item.tId,value)"
+        />
+
+        <!-- "
+        @editThis="edit = item.tId"
+        @editComplete="value => editCompleteHandler(item.tId,value)"
+      /> -->
+    </ul>
 </div>
 </template>
 
 <script>
+import TodoItem from '../components/TodoItem'
 export default {
   data () {
     return {
-      filter: 'all' // all.active.done
+      filter: 'all', // all.active.done
+      editid: null // 原始是用 edit，易搞混:edit="item.tId===edit"
     }
+  },
+  mounted () {
+    console.log('Todo.vue 讀取localstorage資料...')
+    this.$store.dispatch('READ_TODOS')
   },
   computed: {
     list () {
-      // console.log('>', this)
+      console.log('> rung...')
       return this.$store.getters.filterList(this.filter)
       /* 不要用this.$router.route.query.filter 這資料不應該被這一頁所處理，儘管拿得這樣的資料 */
     }
@@ -37,6 +66,23 @@ export default {
         this.filter = route.query.filter || 'all'
       }
     }
+  },
+  methods: {
+    // checkHandler (check) {
+    //   console.log(check)
+    // },
+
+    checkHandler (tId, done) {
+      console.log(tId, done)
+      this.$store.dispatch('CHECK_TODO', { tId, done })
+    }
+    // editCompleteHandler (tId, content) {
+    //   this.edit = null
+    //   this.$store.dispatch('UPDATE_TODO', { tId, content })
+    // }
+  },
+  components: {
+    TodoItem
   }
 }
 </script>
