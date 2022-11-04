@@ -3,13 +3,13 @@
       <template v-if="!edit">
         <!-- <input type="checkbox" v-model="editingTodo.done">{{ todo.content }} -->
         <input type="checkbox" v-model="done">{{ todo.content }}
-        <!-- <button @click="$emit('editThis')">編輯</button> -->
+        <button @click="$emit('editThis')">編輯</button>
       </template>
       <template v-else>
         <!-- <input type="text" v-model="editingTodo.content"> -->
-        <input type="text" v-model="content">
-        <!-- <input type="text" v-model="editContent" v-focus="editContent"> -->
-        <!-- <button @click="$emit('editComplete',editContent)">完成</button> -->
+        <!-- <input type="text" v-model="content"> -->
+        <input type="text" v-model="editContent">
+        <button @click="$emit('editComplete',editContent)">完成</button>
       </template>
     </li>
 </template>
@@ -31,18 +31,21 @@ export default {
       editContent: ''
     }
   },
+  /* 在v-model="content"情況下，沒有此mounted 將content寫入editContent，會造成 編輯時，若 沒有改變原本內容，按下"編輯"按鈕，則此元件送往父層的內容(editContent)是空值~注意：此時computed的set不會有作用，因為content的內容沒變! 當然，如果編輯時 改變原本內容，按下"編輯"按鈕，則此元件送往父層的內容(editContent)是更新過的新值(透過computed運作)  */
   mounted () {
     this.editContent = this.todo.content
   },
   computed: {
-    content: {
-      get () {
-        return this.todo.content
-      },
-      set (value) {
-        this.editContent = value
-      }
-    },
+    /* 改成 v-model="editContent"後，就不需要這部分 */
+    // content: {
+    //   get () {
+    //     return this.todo.content
+    //   },
+    //   set (value) {
+    //     console.log(value)
+    //     this.editContent = value
+    //   }
+    // },
     done: {
       get () {
         return this.todo.done

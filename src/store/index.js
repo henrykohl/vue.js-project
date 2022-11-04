@@ -92,37 +92,38 @@ export default new Vuex.Store({
         todos,
       };
     },
-    // UPDATE方法一:整包傳入，更新，後整包寫回
-    UPDATE_TODO({ commit }, { tId, todo }) {
-      // 1. PATCH //if使用API 可以用到 axios.patch()
-      const todos = STORE.load();
-      todos.splice(tId, 1, todo);
-      STORE.save(todos);
-      // 2. commit mutation
-      commit("SET_TODOS", todos);
-      // 3. return
-      return {
-        tId,
-        todo,
-      };
-    },
-    // UPDATE方法二: 只傳內容content
-    // UPDATE_TODO({ commit, state }, { tId, content }) {
-    //   // 1. PATCH axios.patch()
-    //   if (state.todos[tId].content === content) return;
-    //   console.log("API");
+    /* (project#1) UPDATE方法一:整包傳入，更新，後整包寫回 */
+    // UPDATE_TODO({ commit }, { tId, todo }) {
+    //   // 1. PATCH //if使用API 可以用到 axios.patch()
     //   const todos = STORE.load();
-    //   // todos.splice(tId, 1, todo)
-    //   todos[tId].content = content;
+    //   todos.splice(tId, 1, todo);
     //   STORE.save(todos);
     //   // 2. commit mutation
     //   commit("SET_TODOS", todos);
     //   // 3. return
     //   return {
     //     tId,
-    //     todo: todos[tId],
+    //     todo,
     //   };
     // },
+    /* (project#2) UPDATE方法二: 只傳內容content */
+    UPDATE_TODO({ commit, state }, { tId, content }) {
+      // 1. PATCH axios.patch()
+      if (state.todos[tId].content === content) return;
+      console.log("API");
+      const todos = STORE.load();
+      // todos.splice(tId, 1, todo)
+      todos[tId].content = content;
+      STORE.save(todos);
+      // 2. commit mutation
+      commit("SET_TODOS", todos);
+      // 3. return
+      return {
+        tId,
+        todo: todos[tId],
+      };
+    },
+
     CHECK_TODO({ commit }, { tId, done }) {
       // UPDATE_TODO ({ commit }, { tId, content }) {
       // 1. PATCH axios.patch()

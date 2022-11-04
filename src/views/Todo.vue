@@ -23,12 +23,10 @@
         :todo="item.todo"
         :edit="item.tId===editid"
         @check="value => checkHandler(item.tId,value)"
-        />
 
-        <!-- "
-        @editThis="edit = item.tId"
+        @editThis="editid = item.tId"
         @editComplete="value => editCompleteHandler(item.tId,value)"
-      /> -->
+      />
     </ul>
 </div>
 </template>
@@ -63,6 +61,8 @@ export default {
     $route: {
       immediate: true,
       handler: function (route) {
+        /* 下一行作用: 正在編輯時，若沒按下"完成"，就切換 route ，則編輯狀態會被reset */
+        this.editid = null
         this.filter = route.query.filter || 'all'
       }
     }
@@ -75,11 +75,12 @@ export default {
     checkHandler (tId, done) {
       console.log(tId, done)
       this.$store.dispatch('CHECK_TODO', { tId, done })
+    },
+    editCompleteHandler (tId, content) {
+      // console.log(tId, content)
+      this.editid = null
+      this.$store.dispatch('UPDATE_TODO', { tId, content })
     }
-    // editCompleteHandler (tId, content) {
-    //   this.edit = null
-    //   this.$store.dispatch('UPDATE_TODO', { tId, content })
-    // }
   },
   components: {
     TodoItem
