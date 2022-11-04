@@ -8,7 +8,8 @@
       <template v-else>
         <!-- <input type="text" v-model="editingTodo.content"> -->
         <!-- <input type="text" v-model="content"> -->
-        <input type="text" v-model="editContent">
+        <!-- 可以用v-focus="123" 看看有什麼有意思的地方(注意expression與name的變化); 有了v-focus可以在按下編輯編輯按鈕後，游標自動進到 編輯框內-->
+        <input type="text" v-model="editContent"  v-focus="editContent">
         <button @click="$emit('editComplete',editContent)">完成</button>
       </template>
     </li>
