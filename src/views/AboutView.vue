@@ -1,11 +1,11 @@
 <template>
-  <!-- <div class="about"> -->
+  <div class="about">
     <!-- <h1>This is an about page</h1> -->
-    <!-- <button @click="change(now-1)">Prev</button>
-    <button @click="change(now+1)">Next</button> -->
+    <button @click="change(now-1)">Prev</button>
+    <button @click="change(now+1)">Next</button>
     <div class="card-slider">
-      <!-- name="flip-list" -->
-      <transition-group class="card-slider-items" >
+      <!-- transition-group 的名稱 name="flip-list" -->
+      <transition-group class="card-slider-items" name="flip-list">
         <div class="card-slider-item" v-for="item in showImages" :key="item.id" :data-id="item.id">
         <!-- <div class="card-slider-item" v-for="item in showImages" :key="item.id"> -->
         <!-- <div class="card-slider-item" v-for="item in allImages" :key="item.id"> -->
@@ -15,7 +15,7 @@
 
       </transition-group>
     </div>
-  <!-- </div> -->
+  </div>
 
 </template>
 
@@ -54,20 +54,20 @@ export default {
       const start = this.now - 4
       return this.allImages.slice(start).concat(this.allImages.slice(0, start))
     }
+  },
+  methods: {
+    change (index) {
+      const limit = this.allImages.length - 1
+      this.now = index < 0 ? limit : index > limit ? 0 : index
+      // if (index < 0) {
+      //   this.now = limit
+      // } else if (index > limit) {
+      //   this.now = 0
+      // } else {
+      //   this.now = index
+      // }
+    }
   }
-  // methods: {
-  //   change (index) {
-  //     const limit = this.allImages.length - 1
-  //     this.now = index < 0 ? limit : index > limit ? 0 : index
-  //     // if (index < 0) {
-  //     //   this.now = limit
-  //     // } else if (index > limit) {
-  //     //   this.now = 0
-  //     // } else {
-  //     //   this.now = index
-  //     // }
-  //   }
-  // }
 }
 </script>
 
@@ -89,23 +89,24 @@ export default {
 
 .card-slider-item{
 
-  /* z-index: 1; */
+  z-index: 1;
   flex: calc(25% - 20px) 0 0;
   /* flex: 20% 0 0; */
   margin: 10px;
-  /* background-color: #eee; */
+  /* 用在圖片onError的情況下 */
+  background-color: #eee;
 }
-/*
+
 .card-slider-item:first-child,.card-slider-item:last-child{
   z-index: -1;
   visibility: hidden;
-} */
+}
 img{
   width: 100%;
 }
-/*
+
 .flip-list-move {
   transition: transform 0.5s;
-} */
+}
 
 </style>
